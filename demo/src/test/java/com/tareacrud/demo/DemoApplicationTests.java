@@ -1,10 +1,10 @@
-package com.concesionarioapp.conapp;
+package com.tareacrud.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ConappApplicationTests {
+class DemoApplicationTests {
 
 	@Test
 	void contextLoads() {

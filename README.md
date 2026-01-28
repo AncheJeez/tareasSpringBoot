@@ -1,3 +1,5 @@
+para activar postgre windows +r services.msc
+
 # CRUD MVC con Thymeleaf — RA3
 
 cambiar en vez de coches -> empresas

@@ -1,13 +1,13 @@
-package com.concesionarioapp.conapp;
+package com.tareacrud.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ConappApplication {
+public class DemoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ConappApplication.class, args);
+		SpringApplication.run(DemoApplication.class, args);
 	}
 
 }
