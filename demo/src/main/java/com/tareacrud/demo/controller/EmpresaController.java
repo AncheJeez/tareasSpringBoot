@@ -1,4 +1,4 @@
-ªpackage com.tareacrud.demo.controller;
+package com.tareacrud.demo.controller;
 
 import com.tareacrud.demo.entity.Empresa;
 import com.tareacrud.demo.service.EmpresaService;
@@ -66,16 +66,6 @@ public class EmpresaController {
         if (empresa.isPresent()) {
             empresaService.eliminar(id);
             return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
-    }
-    
-    // Cambiar estado de actividad
-    @PatchMapping("/{id}/estado")
-    public ResponseEntity<Empresa> cambiarEstado(@PathVariable Long id) {
-        Empresa empresa = empresaService.cambiarEstado(id);
-        if (empresa != null) {
-            return ResponseEntity.ok(empresa);
         }
         return ResponseEntity.notFound().build();
     }
