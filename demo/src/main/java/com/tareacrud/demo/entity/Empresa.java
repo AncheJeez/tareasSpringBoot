@@ -21,22 +21,4 @@ public class Empresa {
     
     @Column(name = "nif", nullable = false, unique = true, length = 20)
     private String nif;
-    
-    @Column(name = "telefono", length = 20)
-    private String telefono;
-    
-    @Column(name = "email", length = 100)
-    private String email;
-    
-    @Column(name = "direccion", length = 255)
-    private String direccion;
-    
-    @Column(name = "ciudad", length = 50)
-    private String ciudad;
-    
-    @Column(name = "pais", length = 50)
-    private String pais;
-    
-    @Column(name = "activa", nullable = false)
-    private Boolean activa = true;
 }

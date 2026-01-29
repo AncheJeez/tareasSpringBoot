@@ -1,4 +1,4 @@
-package com.tareacrud.demo.controller;
+ªpackage com.tareacrud.demo.controller;
 
 import com.tareacrud.demo.entity.Empresa;
 import com.tareacrud.demo.service.EmpresaService;
@@ -47,34 +47,6 @@ public class EmpresaController {
         Optional<Empresa> empresa = empresaService.obtenerPorNombre(nombre);
         return empresa.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-    
-    // Obtener empresas por ciudad
-    @GetMapping("/ciudad/{ciudad}")
-    public ResponseEntity<List<Empresa>> obtenerPorCiudad(@PathVariable String ciudad) {
-        List<Empresa> empresas = empresaService.obtenerPorCiudad(ciudad);
-        return ResponseEntity.ok(empresas);
-    }
-    
-    // Obtener empresas activas
-    @GetMapping("/activas")
-    public ResponseEntity<List<Empresa>> obtenerActivas() {
-        List<Empresa> empresas = empresaService.obtenerActivas();
-        return ResponseEntity.ok(empresas);
-    }
-    
-    // Obtener empresas inactivas
-    @GetMapping("/inactivas")
-    public ResponseEntity<List<Empresa>> obtenerInactivas() {
-        List<Empresa> empresas = empresaService.obtenerInactivas();
-        return ResponseEntity.ok(empresas);
-    }
-    
-    // Crear nueva empresa
-    @PostMapping
-    public ResponseEntity<Empresa> crear(@RequestBody Empresa empresa) {
-        Empresa nuevaEmpresa = empresaService.crear(empresa);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevaEmpresa);
     }
     
     // Actualizar empresa

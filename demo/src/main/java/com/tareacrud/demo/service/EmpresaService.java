@@ -45,25 +45,6 @@ public class EmpresaService {
         return resultado.isEmpty() ? Optional.empty() : Optional.of(resultado.get(0));
     }
     
-    // Obtener empresas por ciudad
-    public List<Empresa> obtenerPorCiudad(String ciudad) {
-        TypedQuery<Empresa> query = entityManager.createQuery("SELECT e FROM Empresa e WHERE e.ciudad = :ciudad", Empresa.class);
-        query.setParameter("ciudad", ciudad);
-        return query.getResultList();
-    }
-    
-    // Obtener empresas activas
-    public List<Empresa> obtenerActivas() {
-        TypedQuery<Empresa> query = entityManager.createQuery("SELECT e FROM Empresa e WHERE e.activa = true", Empresa.class);
-        return query.getResultList();
-    }
-    
-    // Obtener empresas inactivas
-    public List<Empresa> obtenerInactivas() {
-        TypedQuery<Empresa> query = entityManager.createQuery("SELECT e FROM Empresa e WHERE e.activa = false", Empresa.class);
-        return query.getResultList();
-    }
-    
     // Crear nueva empresa
     public Empresa crear(Empresa empresa) {
         entityManager.persist(empresa);
@@ -77,12 +58,6 @@ public class EmpresaService {
         if (empresa != null) {
             empresa.setNombre(empresaActualizada.getNombre());
             empresa.setNif(empresaActualizada.getNif());
-            empresa.setTelefono(empresaActualizada.getTelefono());
-            empresa.setEmail(empresaActualizada.getEmail());
-            empresa.setDireccion(empresaActualizada.getDireccion());
-            empresa.setCiudad(empresaActualizada.getCiudad());
-            empresa.setPais(empresaActualizada.getPais());
-            empresa.setActiva(empresaActualizada.getActiva());
             
             entityManager.merge(empresa);
             return empresa;
@@ -97,18 +72,5 @@ public class EmpresaService {
         if (empresa != null) {
             entityManager.remove(empresa);
         }
-    }
-    
-    // Cambiar estado de actividad
-    public Empresa cambiarEstado(Long id) {
-        Empresa empresa = entityManager.find(Empresa.class, id);
-        
-        if (empresa != null) {
-            empresa.setActiva(!empresa.getActiva());
-            entityManager.merge(empresa);
-            return empresa;
-        }
-        
-        return null;
     }
 }
