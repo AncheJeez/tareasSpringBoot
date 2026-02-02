@@ -45,6 +45,25 @@ public class EmpresaService {
         return resultado.isEmpty() ? Optional.empty() : Optional.of(resultado.get(0));
     }
     
+    // Guardar empresa (crear o actualizar)
+    public Empresa guardar(Empresa empresa) {
+        if (empresa.getId() == null) {
+            // Crear nueva empresa
+            entityManager.persist(empresa);
+            return empresa;
+        } else {
+            // Actualizar empresa existente
+            Empresa empresaExistente = entityManager.find(Empresa.class, empresa.getId());
+            if (empresaExistente != null) {
+                empresaExistente.setNombre(empresa.getNombre());
+                empresaExistente.setNif(empresa.getNif());
+                entityManager.merge(empresaExistente);
+                return empresaExistente;
+            }
+            return null;
+        }
+    }
+    
     // Crear nueva empresa
     public Empresa crear(Empresa empresa) {
         entityManager.persist(empresa);
