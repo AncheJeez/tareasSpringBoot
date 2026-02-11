@@ -6,27 +6,73 @@
     <title>Panel Admin</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
         }
+        
         h1 {
-            color: darkred;
+            background-color: #d32f2f;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
         }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        ul li {
+            margin-bottom: 10px;
+        }
+
         a {
             display: inline-block;
-            margin-top: 15px;
+            background-color: #1976d2;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
         }
+
+        a:hover {
+            background-color: #1565c0;
+        }
+        
+        p {
+            font-size: 1.2em;
+            color: #555;
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
 
-<h1>Panel de Administración</h1>
+    <h1>Panel de Administración</h1>
 
-<p th:text="${mensaje}"></p>
+    <div class="container">
+        <p th:text="${mensaje}"></p>
 
-<ul>
-    <li><a th:href="@{/games}">Ver juegos</a></li>
-    <li><a th:href="@{/logout}">Cerrar sesión</a></li>
-</ul>
+        <ul>
+            <li><a th:href="@{/empresas}">Ver empresas</a></li>
+            <li><a th:href="@{/logout}">Cerrar sesión</a></li>
+        </ul>
+    </div>
 
 </body>
 </html>

@@ -5,33 +5,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listado de Empresas</title>
     <style>
-        table {
-            border-collapse: collapse;
-            width: 80%;
+        /* Estilos generales */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            color: #333;
         }
-        th, td {
-            border: 1px solid #333;
-            padding: 8px;
+
+        h1 {
             text-align: center;
+            color: #1976d2;
+            margin-top: 30px;
         }
+
+        /* Tabla */
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+            font-size: 1em;
+        }
+
         th {
-            background-color: #eee;
+            background-color: #1976d2;
+            color: white;
+            font-weight: bold;
         }
+
+        tr:nth-child(even) {
+            background-color: #f4f4f4;
+        }
+
+        tr:hover {
+            background-color: #e1f5fe;
+        }
+
+        /* Enlaces */
         a {
-            margin: 0 5px;
+            color: #1976d2;
+            text-decoration: none;
+            margin: 0 8px;
         }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Botón Nueva Empresa */
+        p a {
+            display: inline-block;
+            background-color: #1976d2;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        p a:hover {
+            background-color: #1565c0;
+        }
+
+        /* Paginación */
         .pagination {
-            margin-top: 15px;
+            text-align: center;
+            margin-top: 20px;
         }
-        .disabled {
+
+        .pagination a {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #1976d2;
+            color: white;
+            border-radius: 5px;
+            margin: 0 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .pagination a:hover {
+            background-color: #1565c0;
+        }
+
+        .pagination .disabled {
             color: #999;
             pointer-events: none;
+        }
+
+        /* Cerrar sesión */
+        form {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        form button {
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        form button:hover {
+            background-color: #c62828;
         }
     </style>
 </head>
 <body>
 
-<h1>Empresas</h1>
+<h1>Listado de Empresas</h1>
 
 <p>
     <a th:href="@{/empresas/nuevo}">Nueva Empresa</a>
@@ -74,19 +171,17 @@
 
 <div class="pagination">
     <a th:if="${empresasPage.hasPrevious()}"
-       th:href="@{/empresas(page=${empresasPage.number - 1}, size=${empresasPage.size})}">
-        « Anterior
-    </a>
+       th:href="@{/empresas(page=${empresasPage.number - 1}, size=${empresasPage.size})}">« Anterior</a>
     <span th:if="${!empresasPage.hasPrevious()}" class="disabled">« Anterior</span>
 
     <a th:if="${empresasPage.hasNext()}"
-       th:href="@{/empresas(page=${empresasPage.number + 1}, size=${empresasPage.size})}">
-        Siguiente »
-    </a>
+       th:href="@{/empresas(page=${empresasPage.number + 1}, size=${empresasPage.size})}">Siguiente »</a>
     <span th:if="${!empresasPage.hasNext()}" class="disabled">Siguiente »</span>
 </div>
-<form th:action= "@{/logout}" method="post" style="margin-bottom: 1rem;">
-  <button type="submit">Cerrar sesión</button>
+
+<form th:action= "@{/logout}" method="post">
+    <button type="submit">Cerrar sesión</button>
 </form>
+
 </body>
 </html>
