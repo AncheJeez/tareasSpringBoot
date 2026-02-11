@@ -32,7 +32,7 @@ Explica brevemente cómo has organizado:
 - Entity: Empresa
 
 ## 4) Base de datos elegida (marca una)
-- PostgreSQL
+- H2 (Al principio intenté hacerlo con Postgre)
 
 ## 5) Configuración de la base de datos
 ### 5.1 Dependencias añadidas
@@ -45,15 +45,14 @@ CREATE DATABASE empresa;
 spring.jpa.hibernate.ddl-auto=update
 
 ### 5.3 Pasos para crear la BD (si aplica)
-- PostgreSQL: CREATE DATABASE empresa;
-luego insertar todo de data.sql
+- Se crea automáticamente con unos datos de prueba
 
 ## 6) Cómo ejecutar el proyecto
-1. Requisitos Java 17, Maven, Postgre
+1. Requisitos Java 17, Maven, H2
 2. Comando de arranque:
       no uso comando, utilizo visual studio con la extensión de Springboot
 3. URL de acceso:
-   - http://localhost:8080/...
+   - http://localhost:9000/...
 
 ## 7) Pantallas / Rutas MVC
 - / GET
