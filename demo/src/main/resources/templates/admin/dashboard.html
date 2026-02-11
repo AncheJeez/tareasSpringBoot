@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: darkred;
+        }
+        a {
+            display: inline-block;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Panel de Administración</h1>
+
+<p th:text="${mensaje}"></p>
+
+<ul>
+    <li><a th:href="@{/games}">Ver juegos</a></li>
+    <li><a th:href="@{/logout}">Cerrar sesión</a></li>
+</ul>
+
+</body>
+</html>

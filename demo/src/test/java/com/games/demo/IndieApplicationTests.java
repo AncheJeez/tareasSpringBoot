@@ -1,4 +1,4 @@
-package com.tareacrud.demo;
+package com.games.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Empresa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        form {
+            width: 400px;
+            margin: 20px 0;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 6px;
+            margin-top: 4px;
+            box-sizing: border-box;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        button {
+            margin-top: 15px;
+            padding: 8px 15px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<h1 th:text="${empresa.id} != null ? 'Editar Empresa' : 'Nueva Empresa'">Formulario Empresa</h1>
+
+<form th:action="@{/empresas/guardar}" th:object="${empresa}" method="post">
+
+    <input type="hidden" th:field="*{id}" />
+
+    <label for="nombre">Nombre:</label>
+    <input type="text" th:field="*{nombre}" id="nombre" placeholder="Nombre de la empresa" required />
+    <div class="error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+
+    <label for="nif">NIF:</label>
+    <input type="text" th:field="*{nif}" id="nif" placeholder="NIF de la empresa" required />
+    <div class="error" th:if="${#fields.hasErrors('nif')}" th:errors="*{nif}"></div>
+
+    <label for="direccionSocial">Dirección Social:</label>
+    <input type="text" th:field="*{direccionSocial}" id="direccionSocial" placeholder="Dirección social" required />
+    <div class="error" th:if="${#fields.hasErrors('direccionSocial')}" th:errors="*{direccionSocial}"></div>
+
+    <label for="razonSocial">Razón Social:</label>
+    <input type="text" th:field="*{razonSocial}" id="razonSocial" placeholder="Razón social" required />
+    <div class="error" th:if="${#fields.hasErrors('razonSocial')}" th:errors="*{razonSocial}"></div>
+
+    <label for="capitalSocial">Capital Social (€):</label>
+    <input type="number" step="0.01" th:field="*{capitalSocial}" id="capitalSocial" placeholder="0.00" required />
+    <div class="error" th:if="${#fields.hasErrors('capitalSocial')}" th:errors="*{capitalSocial}"></div>
+
+    <label for="fechaConstitucion">Fecha Constitución:</label>
+    <input type="date" th:field="*{fechaConstitucion}" id="fechaConstitucion" required />
+    <div class="error" th:if="${#fields.hasErrors('fechaConstitucion')}" th:errors="*{fechaConstitucion}"></div>
+
+    <button type="submit" th:text="${empresa.id} != null ? 'Actualizar' : 'Guardar'">Guardar</button>
+</form>
+
+<a th:href="@{/empresas}">Volver al listado</a>
+
+<form th:action="@{/logout}" method="post" style="margin-bottom: 1rem;">
+<button type="submit">Cerrar sesión</button>
+</form>
+</body>
+</html>

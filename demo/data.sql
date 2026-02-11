@@ -1,7 +1,7 @@
--- Script para insertar datos de prueba en la tabla empresa
-TRUNCATE TABLE empresa RESTART IDENTITY CASCADE;
+-- Script para insertar datos de prueba en la tabla EMPRESA
+TRUNCATE TABLE EMPRESA RESTART IDENTITY CASCADE;
 
-INSERT INTO empresa (nombre, nif, direccion_social, razon_social, capital_social, fecha_constitucion) VALUES
+INSERT INTO EMPRESA (NOMBRE, NIF, DIRECCION_SOCIAL, RAZON_SOCIAL, CAPITAL_SOCIAL, FECHA_CONSTITUCION) VALUES
 ('Acme Corporation', 'A12345678', 'Calle Principal 123, Madrid', 'Acme Corp S.L.', 500000, '2015-03-15'),
 ('Tech Solutions S.L.', 'B87654321', 'Avenida Tecnologica 456, Barcelona', 'Tech Solutions S.L.', 250000, '2016-07-20'),
 ('Global Industries Inc', 'C11223344', 'Paseo Industrial 789, Valencia', 'Global Ind S.A.', 1000000, '2010-01-10'),
@@ -17,4 +17,4 @@ INSERT INTO empresa (nombre, nif, direccion_social, razon_social, capital_social
 
 COMMIT;
 
-SELECT * FROM empresa;
+SELECT * FROM EMPRESA;

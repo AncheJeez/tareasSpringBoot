@@ -2,10 +2,20 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Spring Boot-DemoApplication<demo>",
+            "name": "Spring Boot-EmpresaApplication<demo>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "mainClass": "com.tareacrud.demo.DemoApplication",
+            "mainClass": "com.demo.EmpresaApplication",
+            "projectName": "demo",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-EmpresaApplication<demo>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.demo.EmpresaApplication",
             "projectName": "demo",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
