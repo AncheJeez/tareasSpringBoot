@@ -3,60 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        h1 {
-            color: #4CAF50;
-            font-size: 3rem;
-        }
-
-        p {
-            font-size: 1.2rem;
-            margin: 10px 0;
-        }
-
-        a {
-            text-decoration: none;
-            color: #007BFF;
-            font-weight: bold;
-            padding: 8px 16px;
-            border-radius: 4px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        a:hover {
-            background-color: #007BFF;
-            color: white;
-        }
-
-        .container {
-            text-align: center;
-        }
-    </style>
+    <title>Índice - Demo</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
     <div class="container">
-        <h1>Bienvenido</h1>
-        
-        <p>
-            <a th:href="@{/login}">Iniciar sesión</a>
-        </p>
-
-        <p>
-            <a th:href="@{/empresas}">Ver empresas</a>
-        </p>
+        <h1>Gestión - Demo</h1>
+        <div th:if="${username}">
+            <p>Hola, <strong th:text="${username}">Usuario</strong>!</p>
+            <div class="button-container">
+                <a th:href="@{/empresas}" class="button">Administrar Empresas</a>
+                <div th:switch="${isAdmin}">
+                    <div th:case="true">
+                        <div>Usted es administrador</div>
+                        <a th:href="@{/usuarios}" class="button">Administrar Usuario</a>
+                    </div>
+                    <div th:case="false">
+                        <div>Usted es usuario normal</div>
+                    </div>
+                </div>
+                <form th:action="@{/logout}" method="post" style="display:inline">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" class="button logout">Cerrar sesión</button>
+                </form>
+            </div>
+        </div>
+        <div th:unless="${username}">
+            <h1>Bienvenido! Inicie sesión para poder acceder!</h1>
+            <a th:href="@{/login}" class="button">Logearse</a>
+        </div>
     </div>
 </body>
 </html>

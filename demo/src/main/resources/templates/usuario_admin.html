@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Usuarios</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+    <div class="container-tabla">
+        <h1>Administrar Usuarios</h1>
+
+        <table border="1">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Teléfono</th>
+                <th>Empresa</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="u : ${usuarios}">
+                <td th:text="${u.id}">1</td>
+                <td th:text="${u.email}">Email</td>
+                <td th:text="${u.nombre}">Nombre</td>
+                <td th:text="${u.apellido}">Apellido</td>
+                <td th:text="${u.telefono}">Teléfono</td>
+                <td th:text="${u.empresa?.nombre}">Empresa</td>
+                <td th:text="${u.role}">Rol</td>
+                <td>
+                    <a th:href="@{/usuarios/{id}/edit(id=${u.id})}"><button class="button">Editar</button></a>
+                    <form th:action="@{/usuarios/{id}/delete(id=${u.id})}" method="post" style="display:inline">
+                        <button class="button logout" type="submit" onclick="return confirm('¿Borrar usuario?')">Borrar</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p>
+            <a th:href="@{/usuarios/new}"><button class="button">Crear Usuario</button></a>
+            <a th:href="@{/}"><button class="button">Volver</button></a>
+        </p>
+
+        <!-- Paginación 
+        NO FUNCIONA POR QUE PagingAndSortingRepository NO IMPORTA CRUD Y DA ERRORES QUE NO SE CORREGUIR
+        -->
+
+        <!-- <div>
+            <span th:if="${currentPage > 0}">
+                <a th:href="@{/usuarios?page={page}(page=${currentPage - 1})}">Anterior</a>
+            </span>
+            <span> Página <span th:text="${currentPage + 1}">1</span> de <span th:text="${totalPages}">1</span> </span>
+            <span th:if="${currentPage < totalPages - 1}">
+                <a th:href="@{/usuarios?page={page}(page=${currentPage + 1})}">Siguiente</a>
+            </span>
+        </div> -->
+    </div>
+</body>
+</html>

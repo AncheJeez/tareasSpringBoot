@@ -1,14 +1,10 @@
-para activar postgre windows +r services.msc
-localhost:8080
-
-data.sql es el insert de prueba que introduzco en postgre pgadmin4
-
 # CRUD MVC con Thymeleaf — RA3
 
 
 ## 1) Datos del alumno/a
-- Entidad elegida -> Empresa
+- Entidad elegida -> Empresa - Usuario
 
+ANTIGUA TABLA NO ECHAR CUENTA A ESTO
 CREATE TABLE empresa (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,
@@ -34,6 +30,11 @@ Explica brevemente cómo has organizado:
 ## 4) Base de datos elegida (marca una)
 - H2 (Al principio intenté hacerlo con Postgre)
 
+IGNORAR ESTO, ES PREVIO CUANDO USABA POSTGRE
+para activar postgre windows +r services.msc
+localhost:8080
+data.sql es el insert de prueba que introduzco en postgre pgadmin4
+
 ## 5) Configuración de la base de datos
 ### 5.1 Dependencias añadidas
 (Indica la dependencia del driver que has usado)
@@ -46,31 +47,30 @@ spring.jpa.hibernate.ddl-auto=update
 
 ### 5.3 Pasos para crear la BD (si aplica)
 - Se crea automáticamente con unos datos de prueba
+¡¡¡IMPORTANTE!!!
+Hace falta tener en C:/Users/{Nobre de usuario}/ el fichero (test.mv.db)
+y vacio
 
 ## 6) Cómo ejecutar el proyecto
-1. Requisitos Java 17, Maven, H2
+1. Requisitos Java 25, Maven, H2
 2. Comando de arranque:
       no uso comando, utilizo visual studio con la extensión de Springboot
 3. URL de acceso:
-   - http://localhost:9000/...
+   - http://localhost:8080/...
 
 ## 7) Pantallas / Rutas MVC
-- / GET
-- //crear GET
-- //crear POST
-- //editar/{id} GET
-- //editar/{id} POST
-- //eliminar/{id} GET
-- /api/empresas/{id} DELETE
-- /api/empresas/{id} GET
-- /api/empresas/{id} PUT
-- /api/empresas/nif/{nif} GET
-- /api/empresas/nombre/{nombre} GET
 
+(PARA REGISTRARSE COMO ADMIN -> juan.perez@techsolutions.es password1)
+- http://localhost:8080/h2-console
+- http://localhost:8080/login
+- CREAR http://localhost:8080/usuarios/new
+- EDITAR http://localhost:8080/empresas/{id_empresa}/edit
+- CREAR http://localhost:8080/empresas/new
+- EDITAR http://localhost:8080/empresas/{id_empresa}/edit
 
 ## 8) Mejoras extra (opcional)
 - Validaciones
 - Estilos Bootstrap
 - Búsqueda
 - Pruebas
-- Paginación
+- Paginación en usuarios

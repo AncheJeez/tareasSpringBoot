@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Empresa</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="container-form">
+        <h1 th:if="${empresa.id}" th:remove="tag">Editar Empresa</h1>
+        <h1 th:unless="${empresa.id}" th:remove="tag">Crear Empresa</h1>
+        <form th:action="${empresa.id} ? @{/empresas/{id}(id=${empresa.id})} : @{/empresas}" th:object="${empresa}" method="post">
+            <div>
+                <label>Nombre:</label>
+                <input type="text" th:field="*{nombre}" />
+            </div>
+            <div>
+                <label>CIF:</label>
+                <input type="text" th:field="*{cif}" />
+            </div>
+            <div>
+                <label>Dirección:</label>
+                <input type="text" th:field="*{direccion}" />
+            </div>
+            <div>
+                <label>Ciudad:</label>
+                <input type="text" th:field="*{ciudad}" />
+            </div>
+            <div>
+                <label>Código Postal:</label>
+                <input type="text" th:field="*{codigoPostal}" />
+            </div>
+            <div>
+                <label>Teléfono:</label>
+                <input type="text" th:field="*{telefono}" />
+            </div>
+            <div>
+                <label>Email:</label>
+                <input type="email" th:field="*{email}" />
+            </div>
+            <div>
+                <button class="button" type="submit" th:text="${empresa.id} ? 'Actualizar Empresa' : 'Guardar Empresa'">Guardar</button>
+                <a th:href="@{/empresas}"><button class="button">Volver</button></a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

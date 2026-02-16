@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Usuario</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="container-form">
+        <h1 th:if="${usuario.id}" th:remove="tag">Editar Usuario</h1>
+        <h1 th:unless="${usuario.id}" th:remove="tag">Crear Usuario</h1>
+        <form th:action="${usuario.id} ? @{/usuarios/{id}(id=${usuario.id})} : @{/usuarios}" th:object="${usuario}" method="post">
+            <div>
+                <label>Email:</label>
+                <input type="email" th:field="*{email}" />
+            </div>
+            <div>
+                <label>Contraseña:</label>
+                <input type="password" th:field="*{password}" />
+            </div>
+            <div>
+                <label>Nombre:</label>
+                <input type="text" th:field="*{nombre}" />
+            </div>
+            <div>
+                <label>Apellido:</label>
+                <input type="text" th:field="*{apellido}" />
+            </div>
+            <div>
+                <label>Teléfono:</label>
+                <input type="text" th:field="*{telefono}" />
+            </div>
+
+            <div>
+                <label>Empresa:</label>
+                <select name="empresaId">
+                    <option th:each="e : ${empresas}"
+                            th:value="${e.id}"
+                            th:text="${e.nombre}">
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <button class="button" type="submit" th:text="${usuario.id} ? 'Actualizar Usuario' : 'Guardar Usuario'">Guardar</button>
+                <a th:href="@{/usuarios}"><button class="button">Volver</button></a>
+            </div>
+
+        </form>
+    </div>
+</body>
+</html>

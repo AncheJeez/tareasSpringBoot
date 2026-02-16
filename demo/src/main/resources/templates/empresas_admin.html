@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Empresas</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+    <div class="container-tabla">
+        <h1>Administrar Empresas</h1>
+
+        <table border="1">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>CIF</th>
+                <th>Ciudad</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="e : ${empresas}">
+                <td th:text="${e.id}">1</td>
+                <td th:text="${e.nombre}">Nombre</td>
+                <td th:text="${e.cif}">CIF</td>
+                <td th:text="${e.ciudad}">Ciudad</td>
+                <td th:text="${e.telefono}">Tel</td>
+                <td th:text="${e.email}">Email</td>
+                <td>
+                    <a th:href="@{/empresas/{id}/edit(id=${e.id})}"><button class="button">Editar</button></a>
+                    <form th:action="@{/empresas/{id}/delete(id=${e.id})}" method="post" style="display:inline">
+                        <button class="button logout" type="submit" onclick="return confirm('¿Borrar empresa?')">Borrar</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p>
+            <a th:href="@{/empresas/new}"><button class="button">Crear Empresa</button></a>
+            <a th:href="@{/}"><button class="button">Volver</button></a>
+        </p>
+
+        <!-- Paginación -->
+        <div>
+            <span th:if="${currentPage > 0}">
+                <a th:href="@{/empresas?page={page}(page=${currentPage - 1})}">Anterior</a>
+            </span>
+            <span> Página <span th:text="${currentPage + 1}">1</span> de <span th:text="${totalPages}">1</span> </span>
+            <span th:if="${currentPage < totalPages - 1}">
+                <a th:href="@{/empresas?page={page}(page=${currentPage + 1})}">Siguiente</a>
+            </span>
+        </div>
+    </div>
+</body>
+</html>
