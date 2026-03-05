@@ -10,6 +10,14 @@
     <div class="container-form">
         <h1 th:if="${usuario.id}" th:remove="tag">Editar Usuario</h1>
         <h1 th:unless="${usuario.id}" th:remove="tag">Crear Usuario</h1>
+
+        <!-- Mostrar errores -->
+        <div th:if="${param.error}" class="error-message">
+            <p th:if="${param.error == 'email'}" th:remove="tag">El email ya está registrado. Usa otro email.</p>
+            <p th:if="${param.error == 'password'}" th:remove="tag">La contraseña es obligatoria.</p>
+            <p th:if="${param.error == 'empresa'}" th:remove="tag">Empresa no encontrada.</p>
+        </div>
+
         <form th:action="${usuario.id} ? @{/usuarios/{id}(id=${usuario.id})} : @{/usuarios}" th:object="${usuario}" method="post">
             <div>
                 <label>Email:</label>

@@ -4,17 +4,13 @@ import com.tareaspring.demo.repository.UsuarioRepository;
 import com.tareaspring.demo.model.Empresa;
 import com.tareaspring.demo.model.Usuario;
 import com.tareaspring.demo.repository.EmpresaRepository;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/usuarios")
@@ -23,11 +19,13 @@ public class UsuarioController {
     private final UsuarioRepository usuarioRepository;
     private final EmpresaRepository empresaRepository;
     private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
-    public UsuarioController(UsuarioRepository usuarioRepository, EmpresaRepository empresaRepository, org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
+    public UsuarioController(UsuarioRepository usuarioRepository, EmpresaRepository empresaRepository, org.springframework.security.crypto.password.PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
         this.usuarioRepository = usuarioRepository;
         this.empresaRepository = empresaRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
     @GetMapping("/new")
@@ -65,15 +63,36 @@ public class UsuarioController {
 
     @PostMapping
     public String createUsuario(@ModelAttribute Usuario usuario, @RequestParam("empresaId") Long empresaId) {
-        Empresa empresa = empresaRepository.findById(empresaId).orElse(null);
-        usuario.setEmpresa(empresa);
-        if (usuario.getPassword() != null && !usuario.getPassword().isEmpty()) {
-            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        // Verificar si el email ya existe
+        if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
+            return "redirect:/usuarios/new?error=email";
         }
+
+        Empresa empresa = empresaRepository.findById(empresaId).orElse(null);
+        if (empresa == null) {
+            return "redirect:/usuarios/new?error=empresa";
+        }
+        usuario.setEmpresa(empresa);
+        String rawPassword = usuario.getPassword();
+        if (rawPassword == null || rawPassword.isEmpty()) {
+            return "redirect:/usuarios/new?error=password";
+        }
+        usuario.setPassword(passwordEncoder.encode(rawPassword));
         if (usuario.getRole() == null) {
             usuario.setRole("ROLE_USER");
         }
         usuarioRepository.save(usuario);
+
+        // Autenticar al usuario recién creado
+        try {
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(usuario.getEmail(), rawPassword);
+            Authentication authentication = authenticationManager.authenticate(authToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (Exception e) {
+            // Si falla autenticación, redirigir a login
+            return "redirect:/login?error=true";
+        }
+
         return "redirect:/usuarios";
     }
 

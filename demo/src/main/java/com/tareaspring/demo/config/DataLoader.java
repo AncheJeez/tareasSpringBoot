@@ -6,6 +6,7 @@ import com.tareaspring.demo.repository.EmpresaRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Value;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -13,6 +14,9 @@ public class DataLoader implements CommandLineRunner {
         private final EmpresaRepository empresaRepository;
         private final com.tareaspring.demo.repository.UsuarioRepository usuarioRepository;
         private final PasswordEncoder passwordEncoder;
+
+        @Value("${app.dataloader.enabled:true}")
+        private boolean dataLoaderEnabled;
 
         public DataLoader(EmpresaRepository empresaRepository, com.tareaspring.demo.repository.UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
                 this.empresaRepository = empresaRepository;
@@ -22,6 +26,7 @@ public class DataLoader implements CommandLineRunner {
 
         @Override
         public void run(String... args) throws Exception {
+                if (dataLoaderEnabled) {
         // Crear empresas
         Empresa empresa1 = new Empresa(
                 "Tech Solutions S.L.",
@@ -139,5 +144,6 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("Base de datos inicializada con datos de ejemplo");
         System.out.println("2 empresas y 4 usuarios creados");
         System.out.println("Accede a la consola H2 en: http://localhost:8080/h2-console");
+                }
     }
 }
