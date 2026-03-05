@@ -1,4 +1,4 @@
-package com.tareaspring.demo;
+package com.tareaspring.demo.controller;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

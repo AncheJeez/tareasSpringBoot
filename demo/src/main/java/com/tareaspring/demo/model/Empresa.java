@@ -1,4 +1,4 @@
-package com.tareaspring.demo;
+package com.tareaspring.demo.model;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;

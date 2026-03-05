@@ -1,4 +1,4 @@
-package com.tareaspring.demo;
+package com.tareaspring.demo.controller;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
