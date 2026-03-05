@@ -10,23 +10,23 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-            .authorizeHttpRequests(auth -> {
-                auth.requestMatchers("/req/signup","/css/**","/js/**").permitAll();
-                auth.anyRequest().authenticated();
-                // hasRole("ADMIN")
-            })
-            .formLogin(form -> form
-                .loginPage("/login")
-                .defaultSuccessUrl("/usuarios", true)
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
-            );
-        return httpSecurity.build();
-    }
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+//        httpSecurity
+//            .authorizeHttpRequests(auth -> {
+//                auth.requestMatchers("/req/signup","/css/**","/js/**").permitAll();
+//                auth.anyRequest().authenticated();
+//                // hasRole("ADMIN")
+//            })
+//            .formLogin(form -> form
+//                .loginPage("/login")
+//                .defaultSuccessUrl("/usuarios", true)
+//                .permitAll()
+//            )
+//            .logout(logout -> logout
+//                .logoutSuccessUrl("/login?logout")
+//                .permitAll()
+//            );
+//        return httpSecurity.build();
+//    }
 }
