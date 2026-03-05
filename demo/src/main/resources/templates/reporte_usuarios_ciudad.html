@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Usuarios por Ciudad</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="container">
+    <h1><b>Consulta db personalizada:</b> Usuarios Por Ciudad</h1>
+
+    <div th:if="${#lists.isEmpty(stats)}" class="error-message">
+        <p>No hay datos para mostrar.</p>
+    </div>
+
+    <div th:unless="${#lists.isEmpty(stats)}" class="chart-wrap">
+        <div th:each="item : ${stats}" class="chart-row">
+            <div class="chart-label" th:text="${item.ciudad}">Ciudad</div>
+            <div class="chart-bar-bg">
+                <div class="chart-bar" th:style="'width:' + ${item.porcentaje} + '%'"></div>
+            </div>
+            <div class="chart-value" th:text="${item.total}">0</div>
+        </div>
+    </div>
+
+    <p>
+        <a class="button" th:href="@{/}">Volver</a>
+    </p>
+</div>
+</body>
+</html>

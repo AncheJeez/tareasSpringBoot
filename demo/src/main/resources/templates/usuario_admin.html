@@ -17,7 +17,7 @@
                 <th>Email</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
-                <th>Teléfono</th>
+                <th>Telefono</th>
                 <th>Empresa</th>
                 <th>Rol</th>
                 <th>Acciones</th>
@@ -29,13 +29,13 @@
                 <td th:text="${u.email}">Email</td>
                 <td th:text="${u.nombre}">Nombre</td>
                 <td th:text="${u.apellido}">Apellido</td>
-                <td th:text="${u.telefono}">Teléfono</td>
+                <td th:text="${u.telefono}">Telefono</td>
                 <td th:text="${u.empresa?.nombre}">Empresa</td>
                 <td th:text="${u.role}">Rol</td>
                 <td>
                     <a th:href="@{/usuarios/{id}/edit(id=${u.id})}"><button class="button">Editar</button></a>
                     <form th:action="@{/usuarios/{id}/delete(id=${u.id})}" method="post" style="display:inline">
-                        <button class="button logout" type="submit" onclick="return confirm('¿Borrar usuario?')">Borrar</button>
+                        <button class="button logout" type="submit" onclick="return confirm('Borrar usuario?')">Borrar</button>
                     </form>
                 </td>
             </tr>
@@ -47,19 +47,15 @@
             <a th:href="@{/}"><button class="button">Volver</button></a>
         </p>
 
-        <!-- Paginación 
-        NO FUNCIONA POR QUE PagingAndSortingRepository NO IMPORTA CRUD Y DA ERRORES QUE NO SE CORREGUIR
-        -->
-
-        <!-- <div>
+        <div>
             <span th:if="${currentPage > 0}">
                 <a th:href="@{/usuarios?page={page}(page=${currentPage - 1})}">Anterior</a>
             </span>
-            <span> Página <span th:text="${currentPage + 1}">1</span> de <span th:text="${totalPages}">1</span> </span>
+            <span> Pagina <span th:text="${currentPage + 1}">1</span> de <span th:text="${totalPages}">1</span> </span>
             <span th:if="${currentPage < totalPages - 1}">
                 <a th:href="@{/usuarios?page={page}(page=${currentPage + 1})}">Siguiente</a>
             </span>
-        </div> -->
+        </div>
     </div>
 </body>
 </html>

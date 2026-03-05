@@ -13,35 +13,42 @@
         <form th:action="${empresa.id} ? @{/empresas/{id}(id=${empresa.id})} : @{/empresas}" th:object="${empresa}" method="post">
             <div>
                 <label>Nombre:</label>
-                <input type="text" th:field="*{nombre}" />
+                <input type="text" th:field="*{nombre}" minlength="4" maxlength="29" required />
+                <p class="error-message" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></p>
             </div>
             <div>
-                <label>CIF:</label>
-                <input type="text" th:field="*{cif}" />
+                <label>CIF/NIF:</label>
+                <input type="text" th:field="*{cif}" pattern="\d{9}" minlength="9" maxlength="9" required />
+                <p class="error-message" th:if="${#fields.hasErrors('cif')}" th:errors="*{cif}"></p>
             </div>
             <div>
-                <label>Dirección:</label>
-                <input type="text" th:field="*{direccion}" />
+                <label>Direccion:</label>
+                <input type="text" th:field="*{direccion}" required />
+                <p class="error-message" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></p>
             </div>
             <div>
                 <label>Ciudad:</label>
-                <input type="text" th:field="*{ciudad}" />
+                <input type="text" th:field="*{ciudad}" minlength="3" maxlength="30" required />
+                <p class="error-message" th:if="${#fields.hasErrors('ciudad')}" th:errors="*{ciudad}"></p>
             </div>
             <div>
-                <label>Código Postal:</label>
-                <input type="text" th:field="*{codigoPostal}" />
+                <label>Codigo Postal:</label>
+                <input type="text" th:field="*{codigoPostal}" required />
+                <p class="error-message" th:if="${#fields.hasErrors('codigoPostal')}" th:errors="*{codigoPostal}"></p>
             </div>
             <div>
-                <label>Teléfono:</label>
-                <input type="text" th:field="*{telefono}" />
+                <label>Telefono:</label>
+                <input type="text" th:field="*{telefono}" pattern="\d{9}" minlength="9" maxlength="9" required />
+                <p class="error-message" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></p>
             </div>
             <div>
                 <label>Email:</label>
-                <input type="email" th:field="*{email}" />
+                <input type="email" th:field="*{email}" required />
+                <p class="error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
             </div>
             <div>
                 <button class="button" type="submit" th:text="${empresa.id} ? 'Actualizar Empresa' : 'Guardar Empresa'">Guardar</button>
-                <a th:href="@{/empresas}"><button class="button">Volver</button></a>
+                <a th:href="@{/empresas}"><button class="button" type="button">Volver</button></a>
             </div>
         </form>
     </div>

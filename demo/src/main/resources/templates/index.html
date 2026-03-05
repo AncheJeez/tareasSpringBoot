@@ -13,6 +13,7 @@
             <p>Hola, <strong th:text="${username}">Usuario</strong>!</p>
             <div class="button-container">
                 <a th:href="@{/empresas}" class="button">Administrar Empresas</a>
+                <a th:href="@{/reportes/usuarios-por-ciudad}" class="button">Reporte Por Ciudad</a>
                 <div th:switch="${isAdmin}">
                     <div th:case="true">
                         <div>Usted es administrador</div>
