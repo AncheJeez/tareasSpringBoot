@@ -1,31 +1,22 @@
 package com.tareaspring.demo.controller;
 
-import com.tareaspring.demo.repository.UsuarioRepository;
 import com.tareaspring.demo.model.Empresa;
-import com.tareaspring.demo.model.Usuario;
-import com.tareaspring.demo.repository.EmpresaRepository;
-import org.springframework.data.domain.PageRequest;
+import com.tareaspring.demo.service.EmpresaService;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/empresas")
 public class EmpresaController {
 
-    private final EmpresaRepository empresaRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final EmpresaService empresaService;
 
-    public EmpresaController(EmpresaRepository empresaRepository, UsuarioRepository usuarioRepository) {
-        this.empresaRepository = empresaRepository;
-        this.usuarioRepository = usuarioRepository;
+    public EmpresaController(EmpresaService empresaService) {
+        this.empresaService = empresaService;
     }
 
     @GetMapping("/new")
@@ -34,16 +25,10 @@ public class EmpresaController {
         return "empresa_form";
     }
 
-    // @GetMapping
-    // public String listEmpresas(Model model) {
-    //     model.addAttribute("empresas", empresaRepository.findAll());
-    //     return "empresas_admin";
-    // }
     @GetMapping
     public String listEmpresas(@RequestParam(value = "page", defaultValue = "0") int page, Model model) {
-        Pageable pageable = PageRequest.of(page, 5);
-        Page<Empresa> empresasPage = empresaRepository.findAll(pageable);
-        
+        Page<Empresa> empresasPage = empresaService.findPage(page, 5);
+
         model.addAttribute("empresas", empresasPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", empresasPage.getTotalPages());
@@ -52,7 +37,7 @@ public class EmpresaController {
 
     @GetMapping("/{id}/edit")
     public String editEmpresa(@PathVariable Long id, Model model) {
-        Empresa empresa = empresaRepository.findById(id).orElse(null);
+        Empresa empresa = empresaService.findById(id);
         if (empresa != null) {
             model.addAttribute("empresa", empresa);
             model.addAttribute("usuarios", empresa.getUsuarios());
@@ -61,33 +46,26 @@ public class EmpresaController {
     }
 
     @PostMapping
-    public String createEmpresa(@ModelAttribute Empresa empresa) {
-        empresaRepository.save(empresa);
+    public String createEmpresa(@Valid @ModelAttribute Empresa empresa, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "empresa_form";
+        }
+        empresaService.save(empresa);
         return "redirect:/empresas";
     }
 
     @PostMapping("/{id}")
-    public String updateEmpresa(@PathVariable Long id, @ModelAttribute Empresa empresa) {
-        Empresa empresaExistente = empresaRepository.findById(id).orElse(null);
-        if (empresaExistente != null) {
-            empresaExistente.setNombre(empresa.getNombre());
-            empresaExistente.setCif(empresa.getCif());
-            empresaExistente.setCiudad(empresa.getCiudad());
-            empresaExistente.setTelefono(empresa.getTelefono());
-            empresaExistente.setEmail(empresa.getEmail());
-            empresaRepository.save(empresaExistente); 
-
-            for (Usuario usuario : empresaExistente.getUsuarios()) {
-                usuario.setEmpresa(empresaExistente);
-                usuarioRepository.save(usuario);
-            }
+    public String updateEmpresa(@PathVariable Long id, @Valid @ModelAttribute Empresa empresa, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "empresa_form";
         }
+        empresaService.update(id, empresa);
         return "redirect:/empresas";
     }
 
     @PostMapping("/{id}/delete")
     public String deleteEmpresa(@PathVariable Long id) {
-        empresaRepository.deleteById(id);
+        empresaService.deleteById(id);
         return "redirect:/empresas";
     }
 }

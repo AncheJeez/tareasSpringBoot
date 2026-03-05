@@ -1,6 +1,8 @@
 package com.tareaspring.demo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,21 +15,25 @@ public class Empresa {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @Size(min = 4, max = 29, message = "El nombre debe tener entre 4 y 29 caracteres")
     private String nombre;
 
     @Column(nullable = false, unique = true)
+    @Pattern(regexp = "\\d{9}", message = "El CIF/NIF debe tener exactamente 9 digitos")
     private String cif;
 
     @Column(nullable = false)
     private String direccion;
 
     @Column(nullable = false)
+    @Size(min = 3, max = 30, message = "La ciudad debe tener entre 3 y 30 caracteres")
     private String ciudad;
 
     @Column(nullable = false)
     private String codigoPostal;
 
     @Column(nullable = false)
+    @Pattern(regexp = "\\d{9}", message = "El telefono debe tener exactamente 9 digitos")
     private String telefono;
 
     @Column(nullable = false)

@@ -1,6 +1,9 @@
 package com.tareaspring.demo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "usuarios")
@@ -11,15 +14,20 @@ public class Usuario {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @Email(message = "El email debe tener un formato valido")
+    @Size(min = 5, max = 20, message = "El email debe tener entre 5 y 20 caracteres")
     private String email;
 
     @Column(nullable = false)
+    @Size(min = 5, max = 20, message = "El nombre debe tener entre 5 y 20 caracteres")
     private String nombre;
 
     @Column(nullable = false)
+    @Size(min = 5, max = 20, message = "El apellido debe tener entre 5 y 20 caracteres")
     private String apellido;
 
     @Column(nullable = false)
+    @Pattern(regexp = "\\d{9}", message = "El telefono debe tener exactamente 9 digitos")
     private String telefono;
 
     @Column(nullable = false)

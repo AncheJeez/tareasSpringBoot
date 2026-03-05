@@ -1,4 +1,4 @@
-package com.tareaspring.demo.service;
+package com.tareaspring.demo.security;
 
 import com.tareaspring.demo.model.Usuario;
 import com.tareaspring.demo.repository.UsuarioRepository;

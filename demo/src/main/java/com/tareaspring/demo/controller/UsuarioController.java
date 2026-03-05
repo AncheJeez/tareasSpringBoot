@@ -1,123 +1,121 @@
 package com.tareaspring.demo.controller;
 
-import com.tareaspring.demo.repository.UsuarioRepository;
-import com.tareaspring.demo.model.Empresa;
 import com.tareaspring.demo.model.Usuario;
-import com.tareaspring.demo.repository.EmpresaRepository;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.tareaspring.demo.service.EmpresaService;
+import com.tareaspring.demo.service.UsuarioCreationStatus;
+import com.tareaspring.demo.service.UsuarioService;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
-    private final UsuarioRepository usuarioRepository;
-    private final EmpresaRepository empresaRepository;
-    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
+    private final UsuarioService usuarioService;
+    private final EmpresaService empresaService;
 
-    public UsuarioController(UsuarioRepository usuarioRepository, EmpresaRepository empresaRepository, org.springframework.security.crypto.password.PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
-        this.usuarioRepository = usuarioRepository;
-        this.empresaRepository = empresaRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
+    public UsuarioController(UsuarioService usuarioService, EmpresaService empresaService) {
+        this.usuarioService = usuarioService;
+        this.empresaService = empresaService;
     }
 
     @GetMapping("/new")
-    public String newUsuario(Model model) {
+    public String newUsuario(Model model, Principal principal) {
         model.addAttribute("usuario", new Usuario());
-        model.addAttribute("empresas", empresaRepository.findAll());
+        model.addAttribute("selectedEmpresaId", null);
+        model.addAttribute("empresas", empresaService.findAll());
+        model.addAttribute("volverUrl", principal == null ? "/" : "/usuarios");
         return "usuario_form";
     }
 
     @GetMapping
-    public String listUsuarios(Model model) {
-        model.addAttribute("usuarios", usuarioRepository.findAll());
+    public String listUsuarios(@RequestParam(value = "page", defaultValue = "0") int page, Model model) {
+        Page<Usuario> usuariosPage = usuarioService.findPage(page, 5);
+
+        model.addAttribute("usuarios", usuariosPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", usuariosPage.getTotalPages());
         return "usuario_admin";
     }
-    // como usuario no va a tener paginacion está comentado
-    // @GetMapping
-    // public String listUsuarios(@RequestParam(value = "page", defaultValue = "0") int page, Model model) {
-    //     Pageable pageable = PageRequest.of(page, 5);
-    //     Page<Usuario> usuariosPage = usuarioRepository.findAll(pageable);
-        
-    //     model.addAttribute("usuarios", usuariosPage.getContent());
-    //     model.addAttribute("currentPage", page);
-    //     model.addAttribute("totalPages", usuariosPage.getTotalPages());
-    //     return "usuarios_admin";
-    // }
-
 
     @GetMapping("/{id}/edit")
-    public String editUsuario(@PathVariable Long id, Model model) {
-        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+    public String editUsuario(@PathVariable Long id, Model model, Principal principal) {
+        Usuario usuario = usuarioService.findById(id);
         model.addAttribute("usuario", usuario);
-        model.addAttribute("empresas", empresaRepository.findAll());
+        model.addAttribute("selectedEmpresaId", usuario != null && usuario.getEmpresa() != null ? usuario.getEmpresa().getId() : null);
+        model.addAttribute("empresas", empresaService.findAll());
+        model.addAttribute("volverUrl", principal == null ? "/" : "/usuarios");
         return "usuario_form";
     }
 
     @PostMapping
-    public String createUsuario(@ModelAttribute Usuario usuario, @RequestParam("empresaId") Long empresaId) {
-        // Verificar si el email ya existe
-        if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
-            return "redirect:/usuarios/new?error=email";
+    public String createUsuario(@Valid @ModelAttribute Usuario usuario,
+                                BindingResult bindingResult,
+                                @RequestParam(value = "empresaId", required = false) Long empresaId,
+                                Model model,
+                                Principal principal) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("selectedEmpresaId", empresaId);
+            model.addAttribute("empresas", empresaService.findAll());
+            model.addAttribute("volverUrl", principal == null ? "/" : "/usuarios");
+            return "usuario_form";
         }
 
-        Empresa empresa = empresaRepository.findById(empresaId).orElse(null);
-        if (empresa == null) {
-            return "redirect:/usuarios/new?error=empresa";
-        }
-        usuario.setEmpresa(empresa);
-        String rawPassword = usuario.getPassword();
-        if (rawPassword == null || rawPassword.isEmpty()) {
-            return "redirect:/usuarios/new?error=password";
-        }
-        usuario.setPassword(passwordEncoder.encode(rawPassword));
-        if (usuario.getRole() == null) {
-            usuario.setRole("ROLE_USER");
-        }
-        usuarioRepository.save(usuario);
+        UsuarioCreationStatus status = usuarioService.create(usuario, empresaId);
 
-        // Autenticar al usuario recién creado
-        try {
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(usuario.getEmail(), rawPassword);
-            Authentication authentication = authenticationManager.authenticate(authToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } catch (Exception e) {
-            // Si falla autenticación, redirigir a login
-            return "redirect:/login?error=true";
+        switch (status) {
+            case EMAIL_ALREADY_EXISTS:
+                return "redirect:/usuarios/new?error=email";
+            case EMPRESA_NOT_FOUND:
+                model.addAttribute("selectedEmpresaId", empresaId);
+                model.addAttribute("empresas", empresaService.findAll());
+                model.addAttribute("volverUrl", principal == null ? "/" : "/usuarios");
+                model.addAttribute("empresaError", "Debes seleccionar una empresa valida.");
+                return "usuario_form";
+            case PASSWORD_REQUIRED:
+                return "redirect:/usuarios/new?error=password";
+            case AUTHENTICATION_FAILED:
+                return "redirect:/login?error=true";
+            case SUCCESS:
+            default:
+                return "redirect:/";
         }
-
-        return "redirect:/usuarios";
     }
 
     @PostMapping("/{id}")
-    public String updateUsuario(@PathVariable Long id, @ModelAttribute Usuario usuario, @RequestParam("empresaId") Long empresaId) {
-        Usuario usuarioExistente = usuarioRepository.findById(id).orElse(null);
-        if (usuarioExistente != null) {
-            usuarioExistente.setEmail(usuario.getEmail());
-            usuarioExistente.setNombre(usuario.getNombre());
-            usuarioExistente.setApellido(usuario.getApellido());
-            usuarioExistente.setTelefono(usuario.getTelefono());
-            if (usuario.getPassword() != null && !usuario.getPassword().isEmpty()) {
-                usuarioExistente.setPassword(passwordEncoder.encode(usuario.getPassword()));
-            }
-            Empresa empresa = empresaRepository.findById(empresaId).orElse(null);
-            usuarioExistente.setEmpresa(empresa);
-            usuarioRepository.save(usuarioExistente);
+    public String updateUsuario(@PathVariable Long id,
+                                @Valid @ModelAttribute Usuario usuario,
+                                BindingResult bindingResult,
+                                @RequestParam(value = "empresaId", required = false) Long empresaId,
+                                Model model,
+                                Principal principal) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("selectedEmpresaId", empresaId);
+            model.addAttribute("empresas", empresaService.findAll());
+            model.addAttribute("volverUrl", principal == null ? "/" : "/usuarios");
+            return "usuario_form";
         }
+        if (empresaId == null) {
+            model.addAttribute("selectedEmpresaId", null);
+            model.addAttribute("empresas", empresaService.findAll());
+            model.addAttribute("volverUrl", principal == null ? "/" : "/usuarios");
+            model.addAttribute("empresaError", "Debes seleccionar una empresa valida.");
+            return "usuario_form";
+        }
+
+        usuarioService.update(id, usuario, empresaId);
         return "redirect:/usuarios";
     }
 
     @PostMapping("/{id}/delete")
     public String deleteUsuario(@PathVariable Long id) {
-        usuarioRepository.deleteById(id);
+        usuarioService.deleteById(id);
         return "redirect:/usuarios";
     }
-
 }
