@@ -60,7 +60,8 @@ y vacio
 
 ## 7) Pantallas / Rutas MVC
 
-(PARA REGISTRARSE COMO ADMIN -> juan.perez@techsolutions.es password1)
+(PARA REGISTRARSE COMO ADMIN -> email admin@admin.es , contraseña admin)
+- http://localhost:8080/
 - http://localhost:8080/h2-console
 - http://localhost:8080/login
 - CREAR http://localhost:8080/usuarios/new
@@ -70,7 +71,6 @@ y vacio
 
 ## 8) Mejoras extra (opcional)
 - Validaciones
-- Estilos Bootstrap
+- Añadir Bootstrap
 - Búsqueda
 - Pruebas
-- Paginación en usuarios
