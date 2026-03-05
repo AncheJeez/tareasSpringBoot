@@ -1,5 +1,8 @@
-package com.tareaspring.demo;
+package com.tareaspring.demo.config;
 
+import com.tareaspring.demo.model.Empresa;
+import com.tareaspring.demo.model.Usuario;
+import com.tareaspring.demo.repository.EmpresaRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,10 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class DataLoader implements CommandLineRunner {
 
         private final EmpresaRepository empresaRepository;
-        private final UsuarioRepository usuarioRepository;
+        private final com.tareaspring.demo.repository.UsuarioRepository usuarioRepository;
         private final PasswordEncoder passwordEncoder;
 
-        public DataLoader(EmpresaRepository empresaRepository, UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+        public DataLoader(EmpresaRepository empresaRepository, com.tareaspring.demo.repository.UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
                 this.empresaRepository = empresaRepository;
                 this.usuarioRepository = usuarioRepository;
                 this.passwordEncoder = passwordEncoder;

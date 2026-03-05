@@ -1,5 +1,7 @@
-package com.tareaspring.demo;
+package com.tareaspring.demo.service;
 
+import com.tareaspring.demo.model.Usuario;
+import com.tareaspring.demo.repository.UsuarioRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

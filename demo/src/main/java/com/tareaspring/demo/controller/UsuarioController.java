@@ -1,5 +1,9 @@
 package com.tareaspring.demo.controller;
 
+import com.tareaspring.demo.repository.UsuarioRepository;
+import com.tareaspring.demo.model.Empresa;
+import com.tareaspring.demo.model.Usuario;
+import com.tareaspring.demo.repository.EmpresaRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

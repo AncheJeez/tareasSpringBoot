@@ -1,4 +1,4 @@
-package com.tareaspring.demo;
+package com.tareaspring.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
