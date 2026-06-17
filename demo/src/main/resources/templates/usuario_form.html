@@ -8,31 +8,24 @@
 </head>
 <body>
     <div class="container-form">
-        <b>
-            <h1 th:if="${usuario.id}" th:remove="tag">Editar Usuario</h1>
-            <h1 th:unless="${usuario.id}" th:remove="tag">Crear Usuario</h1>
-        </b>
+        <h1>Crear Usuario</h1>
 
-        <div th:if="${param.error}" class="error-message">
-            <p th:if="${param.error == 'email'}" th:remove="tag">El email ya esta registrado. Usa otro email.</p>
-            <p th:if="${param.error == 'password'}" th:remove="tag">La contrasena es obligatoria.</p>
-            <p th:if="${param.error == 'empresa'}" th:remove="tag">Empresa no encontrada.</p>
+        <div th:if="${errorMessage}" class="error-message">
+            <p th:text="${errorMessage}"></p>
+        </div>
+        <div th:if="${successMessage}" class="success-message">
+            <p th:text="${successMessage}"></p>
         </div>
 
         <div th:if="${empresaError}" class="error-message">
-            <p th:text="${empresaError}">Debes seleccionar una empresa valida.</p>
+            <p th:text="${empresaError}">Debes seleccionar una empresa válida.</p>
         </div>
 
-        <form th:action="${usuario.id} ? @{/usuarios/{id}(id=${usuario.id})} : @{/usuarios}" th:object="${usuario}" method="post">
+        <form th:action="@{/usuarios}" th:object="${usuarioDto}" method="post">
             <div>
                 <label>Email:</label>
                 <input type="email" th:field="*{email}" minlength="5" maxlength="20" required />
                 <p class="error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
-            </div>
-            <div>
-                <label>Contrasena:</label>
-                <input type="password" th:field="*{password}" />
-                <p class="error-message" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
             </div>
             <div>
                 <label>Nombre:</label>
@@ -45,15 +38,15 @@
                 <p class="error-message" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></p>
             </div>
             <div>
-                <label>Telefono:</label>
+                <label>Teléfono:</label>
                 <input type="text" th:field="*{telefono}" pattern="\d{9}" minlength="9" maxlength="9" required />
                 <p class="error-message" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></p>
             </div>
 
             <div>
                 <label>Empresa:</label>
-                <select name="empresaId" required>
-                    <option value="" disabled th:selected="${selectedEmpresaId == null}">Choose business</option>
+                <select name="empresaId">
+                    <option value="" th:selected="${selectedEmpresaId == null}">Sin empresa</option>
                     <option th:each="e : ${empresas}"
                             th:value="${e.id}"
                             th:selected="${selectedEmpresaId != null and selectedEmpresaId == e.id}"
@@ -63,10 +56,25 @@
             </div>
 
             <div>
-                <button class="button" type="submit" th:text="${usuario.id} ? 'Actualizar Usuario' : 'Guardar Usuario'">Guardar</button>
-                <a th:href="${volverUrl ?: '/'}"><button class="button" type="button">Volver</button></a>
+                <label>Rol:</label>
+                <select th:field="*{role}">
+                    <option th:each="r : ${roles}" th:value="${r}" th:text="${r == 'ROLE_USER' ? 'Usuario' : 'Administrador'}"></option>
+                </select>
             </div>
 
+            <div>
+                <label>Contraseña:</label>
+                <input type="password" th:field="*{password}" minlength="6" maxlength="30" required />
+                <p class="error-message" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+            </div>
+            <div>
+                <label>Confirmar Contraseña:</label>
+                <input type="password" th:field="*{confirmPassword}" minlength="6" maxlength="30" required />
+            </div>
+            <div>
+                <button class="button" type="submit" th:text="${usuario != null and usuario.id != null} ? 'Actualizar Usuario' : 'Guardar Usuario'">Guardar</button>
+                <a th:href="${volverUrl != null ? volverUrl : '/'}"><button class="button" type="button">Volver</button></a>
+            </div>
         </form>
     </div>
 </body>

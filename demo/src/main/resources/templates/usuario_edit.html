@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuario</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="container-form">
+    <h1>Editar Usuario</h1>
+
+    <div th:if="${errorMessage}" class="error-message">
+        <p th:text="${errorMessage}"></p>
+    </div>
+    <div th:if="${successMessage}" class="success-message">
+        <p th:text="${successMessage}"></p>
+    </div>
+
+    <form th:action="@{/usuarios/{id}(id=${usuario.id})}" th:object="${usuarioUpdateDto}" method="post">
+        <div>
+            <label>Email:</label>
+            <input type="email" th:field="*{email}" minlength="5" maxlength="20" required />
+            <p class="error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+        </div>
+        <div>
+            <label>Nombre:</label>
+            <input type="text" th:field="*{nombre}" minlength="5" maxlength="20" required />
+            <p class="error-message" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></p>
+        </div>
+        <div>
+            <label>Apellido:</label>
+            <input type="text" th:field="*{apellido}" minlength="5" maxlength="20" required />
+            <p class="error-message" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></p>
+        </div>
+        <div>
+            <label>Telefono:</label>
+            <input type="text" th:field="*{telefono}" pattern="\d{9}" minlength="9" maxlength="9" required />
+            <p class="error-message" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></p>
+        </div>
+
+        <div>
+            <label>Empresa:</label>
+            <select name="empresaId">
+                <option value="" th:selected="${selectedEmpresaId == null}">Sin empresa</option>
+                <option th:each="e : ${empresas}"
+                        th:value="${e.id}"
+                        th:selected="${selectedEmpresaId != null and selectedEmpresaId == e.id}"
+                        th:text="${e.nombre}">
+                </option>
+            </select>
+        </div>
+
+        <div>
+            <label>Rol:</label>
+            <select th:field="*{role}">
+                <option th:each="r : ${roles}" th:value="${r}" th:text="${r == 'ROLE_USER' ? 'Usuario' : 'Administrador'}" th:selected="${usuario.role == r}"></option>
+            </select>
+        </div>
+
+        <div>
+            <button class="button" type="submit">Guardar cambios</button>
+            <a th:href="${volverUrl != null ? volverUrl : '/usuarios'}"><button class="button" type="button">Volver</button></a>
+            <a th:href="@{/usuarios/{id}/change-password(id=${usuario.id})}"><button class="button" type="button">Cambiar contraseña</button></a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

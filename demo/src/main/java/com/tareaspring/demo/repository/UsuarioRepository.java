@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
@@ -16,7 +18,13 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     }
 
     Optional<Usuario> findByEmail(String email);
+    Optional<Usuario> findByNombre(String nombre);
+    Optional<Usuario> findByEmailOrNombre(String email, String nombre);
     List<Usuario> findByEmpresaId(Long empresaId);
+
+    Page<Usuario> findByRole(String role, Pageable pageable);
+
+    List<Usuario> findByEmpresaCiudad(String ciudad);
 
     @Query("""
             SELECT e.ciudad AS ciudad, COUNT(u) AS total

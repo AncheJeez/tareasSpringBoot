@@ -59,4 +59,12 @@ public class EmpresaService {
     public void deleteById(Long id) {
         empresaRepository.deleteById(id);
     }
+
+    public java.util.List<Empresa> findByCiudad(String ciudad) {
+        return empresaRepository.findByCiudad(ciudad);
+    }
+
+    public java.util.List<String> getDistinctCiudades() {
+        return empresaRepository.findDistinctCiudades();
+    }
 }

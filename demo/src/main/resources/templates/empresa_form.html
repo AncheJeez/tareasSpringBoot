@@ -10,6 +10,7 @@
     <div class="container-form">
         <h1 th:if="${empresa.id}" th:remove="tag">Editar Empresa</h1>
         <h1 th:unless="${empresa.id}" th:remove="tag">Crear Empresa</h1>
+        
         <form th:action="${empresa.id} ? @{/empresas/{id}(id=${empresa.id})} : @{/empresas}" th:object="${empresa}" method="post">
             <div>
                 <label>Nombre:</label>
@@ -26,11 +27,26 @@
                 <input type="text" th:field="*{direccion}" required />
                 <p class="error-message" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></p>
             </div>
+            
             <div>
                 <label>Ciudad:</label>
-                <input type="text" th:field="*{ciudad}" minlength="3" maxlength="30" required />
+                <input list="ciudades" 
+                       type="text" 
+                       th:field="*{ciudad}" 
+                       minlength="3" 
+                       maxlength="30" 
+                       required 
+                       onfocus="showAllDatalistOptions(this)" />
+                       
+                <datalist id="ciudades" th:if="${ciudades != null}">
+                    <option th:each="c : ${ciudades}" th:value="${c}"></option>
+                </datalist>
+                <small style="display: block; margin-top: 4px; color: #666;">
+                    Haz clic para desplegar todas las opciones o escribe una nueva.
+                </small>
                 <p class="error-message" th:if="${#fields.hasErrors('ciudad')}" th:errors="*{ciudad}"></p>
             </div>
+            
             <div>
                 <label>Codigo Postal:</label>
                 <input type="text" th:field="*{codigoPostal}" required />
@@ -52,5 +68,15 @@
             </div>
         </form>
     </div>
+
+    <script th:inline="javascript">
+        function showAllDatalistOptions(input) {
+            const currentValue = input.value;
+            input.value = '';
+            setTimeout(() => {
+                input.value = currentValue;
+            }, 1);
+        }
+    </script>
 </body>
 </html>

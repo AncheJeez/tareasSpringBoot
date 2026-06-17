@@ -10,6 +10,12 @@
     <div class="container-tabla">
         <h1>Administrar Usuarios</h1>
 
+        <div th:if="${errorMessage}" class="error-message">
+            <p th:text="${errorMessage}"></p>
+        </div>
+        <div th:if="${successMessage}" class="success-message">
+            <p th:text="${successMessage}"></p>
+        </div>
         <table border="1">
             <thead>
             <tr>
@@ -30,13 +36,18 @@
                 <td th:text="${u.nombre}">Nombre</td>
                 <td th:text="${u.apellido}">Apellido</td>
                 <td th:text="${u.telefono}">Telefono</td>
-                <td th:text="${u.empresa?.nombre}">Empresa</td>
+                <td th:text="${u.empresa != null ? u.empresa.nombre : ''}">Empresa</td>
                 <td th:text="${u.role}">Rol</td>
                 <td>
                     <a th:href="@{/usuarios/{id}/edit(id=${u.id})}"><button class="button">Editar</button></a>
-                    <form th:action="@{/usuarios/{id}/delete(id=${u.id})}" method="post" style="display:inline">
-                        <button class="button logout" type="submit" onclick="return confirm('Borrar usuario?')">Borrar</button>
-                    </form>
+                    <span th:if="${u.email != currentUserEmail}">
+                        <form th:action="@{/usuarios/{id}/delete(id=${u.id})}" method="post" style="display:inline">
+                            <button class="button logout" type="submit" onclick="return confirm('Borrar usuario?')">Borrar</button>
+                        </form>
+                    </span>
+                    <span th:if="${u.email == currentUserEmail}">
+                        <button class="button" type="button" disabled>Eliminar (actual)</button>
+                    </span>
                 </td>
             </tr>
             </tbody>

@@ -22,6 +22,7 @@ public class EmpresaController {
     @GetMapping("/new")
     public String newEmpresa(Model model) {
         model.addAttribute("empresa", new Empresa());
+        model.addAttribute("ciudades", empresaService.getDistinctCiudades());
         return "empresa_form";
     }
 
@@ -42,12 +43,14 @@ public class EmpresaController {
             model.addAttribute("empresa", empresa);
             model.addAttribute("usuarios", empresa.getUsuarios());
         }
+        model.addAttribute("ciudades", empresaService.getDistinctCiudades());
         return "empresa_form";
     }
 
     @PostMapping
-    public String createEmpresa(@Valid @ModelAttribute Empresa empresa, BindingResult bindingResult) {
+    public String createEmpresa(@Valid @ModelAttribute Empresa empresa, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("ciudades", empresaService.getDistinctCiudades());
             return "empresa_form";
         }
         empresaService.save(empresa);
@@ -55,8 +58,9 @@ public class EmpresaController {
     }
 
     @PostMapping("/{id}")
-    public String updateEmpresa(@PathVariable Long id, @Valid @ModelAttribute Empresa empresa, BindingResult bindingResult) {
+    public String updateEmpresa(@PathVariable Long id, @Valid @ModelAttribute Empresa empresa, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("ciudades", empresaService.getDistinctCiudades());
             return "empresa_form";
         }
         empresaService.update(id, empresa);

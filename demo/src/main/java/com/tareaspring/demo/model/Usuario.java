@@ -18,7 +18,7 @@ public class Usuario {
     @Size(min = 5, max = 20, message = "El email debe tener entre 5 y 20 caracteres")
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @Size(min = 5, max = 20, message = "El nombre debe tener entre 5 y 20 caracteres")
     private String nombre;
 
@@ -33,11 +33,14 @@ public class Usuario {
     @Column(nullable = false)
     private String password;
 
+    @Transient
+    private String confirmPassword;
+
     @Column(nullable = false)
     private String role = "ROLE_USER";
 
     @ManyToOne
-    @JoinColumn(name = "empresa_id", nullable = false)
+    @JoinColumn(name = "empresa_id", nullable = true)
     private Empresa empresa;
 
     // Constructores
@@ -58,6 +61,14 @@ public class Usuario {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public String getRole() {
